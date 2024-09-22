@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 def home(request):
-    return render(request, 'feedback/home.html')
+    username = request.user.username if request.user.is_authenticated else None
+    return render(request, 'feedback/home.html', {'username': username})
 
 def register(request):
     if request.method == 'POST':
