@@ -1,7 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 
 def home(request):
     username = request.user.username if request.user.is_authenticated else None
@@ -34,3 +37,12 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login') 
+
+
+@login_required
+def profile_view(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        user_profile = UserProfile.objects.create(user=request.user)
+    return render(request, 'feedback/profile.html', {'user_profile': user_profile})
