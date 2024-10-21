@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
+from .forms import UserProfileForm
 
 def home(request):
     username = request.user.username if request.user.is_authenticated else None
@@ -47,8 +47,19 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
+    # Attempt to get the user's profile
     try:
         user_profile = UserProfile.objects.get(user=request.user)
-    except ObjectDoesNotExist:
-        user_profile = UserProfile.objects.create(user=request.user)
-    return render(request, 'feedback/profile.html', {'user_profile': user_profile})
+    except UserProfile.DoesNotExist:
+        user_profile = UserProfile(user=request.user)  # Create a new instance if it doesn't exist
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=user_profile)  # Bind form with user profile
+        if form.is_valid():
+            form.save()  # Save the profile data
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('profile')  # Redirect to the profile page after saving
+    else:
+        form = UserProfileForm(instance=user_profile)  # Pre-fill the form with existing profile data
+
+    return render(request, 'feedback/profile.html', {'form': form})
