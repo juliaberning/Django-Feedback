@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
     DEPARTMENT_CHOICES = [
         ('AIA', 'AI Application'),
         ('MLE', 'ML Engineering'),
@@ -19,4 +17,4 @@ class UserProfile(models.Model):
 
     
     def __str__(self):
-        return f'{self.name} {self.surname} ({self.user.username})'
+        return f'{self.department}'

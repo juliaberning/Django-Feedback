@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserProfileForm
+from .forms import CombinedProfileForm
+from .forms import CustomUserCreationForm 
+
 
 def home(request):
     username = request.user.username if request.user.is_authenticated else None
@@ -12,20 +13,21 @@ def home(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()  # Save the user
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            messages.success(request, f'Account created for {username}!')
+            user = form.save(commit=False)
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.save() 
+            messages.success(request, f'Account created for {user.username}!')
 
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=user.username, password=form.cleaned_data['password1'])
             if user is not None:
-                login(request, user) 
+                login(request, user)
 
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'feedback/register.html', {'form': form})
 
 def login_view(request):
@@ -47,19 +49,18 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    # Attempt to get the user's profile
     try:
         user_profile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
-        user_profile = UserProfile(user=request.user)  # Create a new instance if it doesn't exist
+        user_profile = UserProfile(user=request.user)
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=user_profile)  # Bind form with user profile
+        form = CombinedProfileForm(request.POST, instance=user_profile, user=request.user)
         if form.is_valid():
-            form.save()  # Save the profile data
+            form.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('profile')  # Redirect to the profile page after saving
+            return redirect('profile')
     else:
-        form = UserProfileForm(instance=user_profile)  # Pre-fill the form with existing profile data
+        form = CombinedProfileForm(instance=user_profile, user=request.user)
 
     return render(request, 'feedback/profile.html', {'form': form})
