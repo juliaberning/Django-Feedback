@@ -48,8 +48,14 @@ python manage.py makemigrations
 # Apply migrations to the database
 python manage.py migrate
 ```
+### 6. Optional: Running the Initial User Creation Script
+To batch create initial users with their manager assignments, add user data to the create_initial_users.py script and establish an initial password for them. 
+Then run:
 
-### 6. Optional: Generate a model diagram
+```bash
+python manage.py shell < feedback/scripts/create_initial_users.py
+```
+### 7. Optional: Generate a model diagram
 To visualize the relationships between models, you can create a diagram using Django Extensions and Graphviz.
 
 Install the necessary libraries:
