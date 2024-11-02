@@ -64,7 +64,7 @@ python manage.py graph_models -a --dot -o feedback_models.dot
 
 Convert the .dot file to a .png image:
 ```bash
-dot -Tpng myapp_models.dot -o feedbck_models.png
+dot -Tpng feedback_models.dot -o feedback_models.png
 ```
 
 For further information on the graphs you can read the [the django-extensions documentation](https://django-extensions.readthedocs.io/en/latest/graph_models.html).
