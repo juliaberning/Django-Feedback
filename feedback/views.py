@@ -25,7 +25,7 @@ def register(request):
             if user is not None:
                 login(request, user)
 
-            return redirect('home')
+            return redirect('profile')
     else:
         form = CustomUserCreationForm()
     return render(request, 'feedback/register.html', {'form': form})
@@ -59,8 +59,13 @@ def profile_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('profile')
+            return redirect('home')
     else:
         form = CombinedProfileForm(instance=user_profile, user=request.user)
 
     return render(request, 'feedback/profile.html', {'form': form})
+
+@login_required
+def user_list(request):
+    users = UserProfile.objects.all()
+    return render(request, 'feedback/user-list.html', {'users': users})
