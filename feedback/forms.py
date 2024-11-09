@@ -28,7 +28,7 @@ class CombinedProfileForm(forms.ModelForm):
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
             self.fields['email'].initial = user.email
-            self.fields['manager'].queryset = User.objects.exclude(id=user.id)
+            self.fields['manager'].queryset = UserProfile.objects.exclude(id=user.id)
 
     def save(self, commit=True):
         user = self.instance.user  

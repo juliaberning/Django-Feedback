@@ -20,6 +20,6 @@ class UserProfileAdmin(admin.ModelAdmin):
         return dict(UserProfile.DEPARTMENT_CHOICES).get(obj.department)
     department_display.short_description = 'Department' 
     def manager_display(self, obj):
-        return obj.manager.username if obj.manager else None
+        return obj.manager.user.username if obj.manager else None
     manager_display.short_description = 'Manager'
 admin.site.register(UserProfile, UserProfileAdmin)
