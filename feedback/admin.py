@@ -61,7 +61,7 @@ class ReviewInline(admin.TabularInline):
     model = Review
     extra = 0
 class FeedbackProcessAdmin(admin.ModelAdmin):
-    list_display = ('reviewee', 'manager')
+    list_display = ('reviewee', 'manager', 'creation_date')
     search_fields = ('reviewee__user__username', 'manager__user__username')
     inlines = [ReviewInline]
 admin.site.register(FeedbackProcess, FeedbackProcessAdmin)

@@ -1,10 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile
+from .models import UserProfile, FeedbackProcess
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import CombinedProfileForm
-from .forms import CustomUserCreationForm 
+from .forms import CombinedProfileForm, CustomUserCreationForm
 
 
 def home(request):
@@ -69,3 +68,29 @@ def profile_view(request):
 def user_list(request):
     users = UserProfile.objects.all()
     return render(request, 'feedback/user-list.html', {'users': users})
+
+
+
+@login_required
+def create_feedback_process(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        messages.info(request, "You need to complete your profile.")
+        return redirect('profile')
+
+    existing_feedback_process = FeedbackProcess.objects.filter(reviewee=user_profile).first()
+    
+    if request.method == 'POST':
+        if existing_feedback_process:
+            messages.info(request, "You already have an existing feedback process.")
+        else:
+            FeedbackProcess.objects.create(
+                reviewee=user_profile,
+                manager=user_profile.manager 
+            )
+            messages.success(request, "A new feedback process has been created!")
+    
+    return render(request, 'feedback/create-feedback-process.html', {
+        'user_profile': user_profile
+    })
