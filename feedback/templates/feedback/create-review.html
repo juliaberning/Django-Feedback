@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if messages %}
+  <div class="messages" role="alert" aria-live="assertive">
+    <ul>
+      {% for message in messages %}
+        <li class="message {{ message.tags }}">
+          <strong>{% if message.tags %}{{ message.tags|capfirst }}:{% endif %}</strong> {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+
+<h2>Select Reviewee and Submit Review</h2>
+
+<form method="post">
+  {% csrf_token %}
+  
+  <label for="reviewee">Select a Reviewee:</label>
+  <select name="reviewee" id="reviewee">
+    {% for reviewee in reviewees %}
+      <option value="{{ reviewee.id }}">{{ reviewee.user.username }}</option>
+    {% empty %}
+      <option value="">No reviewees available</option>
+    {% endfor %}
+  </select><br><br>
+
+  <fieldset>
+    <legend>Review Details</legend>
+
+    {{ form.as_p }}
+
+  </fieldset>
+
+  <button type="submit">Submit Review</button>
+</form>
+
+{% endblock %}

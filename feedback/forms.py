@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserProfile
+from .models import UserProfile, Review
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -39,3 +39,15 @@ class CombinedProfileForm(forms.ModelForm):
             user.save()  
 
         return super().save(commit=commit)
+    
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['reviewee_strengths_text', 'reviewee_improvements_text', 
+                  'reviewee_growth_rating', 'reviewee_execution_rating', 
+                  'reviewee_collaboration_rating']
+
+        widgets = {
+            'reviewee_strengths_text': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
+            'reviewee_improvements_text': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
+        }

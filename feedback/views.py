@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from .models import Review, UserProfile, FeedbackProcess
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import CombinedProfileForm, CustomUserCreationForm
+from .forms import CombinedProfileForm, CustomUserCreationForm, ReviewForm
 
 
 def home(request):
@@ -131,8 +131,7 @@ def select_reviewer(request):
             try:
                 Review.objects.create(
                     feedback_process=feedback_process,
-                    reviewer=reviewer,  
-                    review_text=""  
+                    reviewer=reviewer,    
                 )
                 messages.success(request, f"Reviewer {reviewer.user.username} has been selected.")
                 return redirect('user-list')
@@ -145,7 +144,45 @@ def select_reviewer(request):
             messages.error(request, "Please select a reviewer.")
     
     return render(request, 'feedback/select-reviewer.html', {
-        'user_profile': user_profile,
+        'user_profile': user_profile, #TODO:evaluate if this is needed
         'feedback_process': feedback_process,
         'potential_reviewers': potential_reviewers,
     })
+
+@login_required
+def create_review(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        messages.info(request, "You need to complete your profile.")
+        return redirect('profile')
+
+    # Fetch all reviews where the logged-in user is the reviewer
+    reviews = Review.objects.filter(reviewer=user_profile)
+
+    # Extract reviewees (the users who selected the logged-in user as their reviewer)
+    reviewees = [review.feedback_process.reviewee for review in reviews]
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        reviewee_id = request.POST.get('reviewee')
+
+        if form.is_valid() and reviewee_id:
+            reviewee = UserProfile.objects.get(id=reviewee_id)
+            feedback_process = FeedbackProcess.objects.get(reviewee=reviewee)
+
+            existing_review = Review.objects.filter(
+                reviewer=user_profile, feedback_process=feedback_process
+            ).first()
+            existing_review.reviewee_strengths_text = form.cleaned_data['reviewee_strengths_text']
+            existing_review.reviewee_improvements_text = form.cleaned_data['reviewee_improvements_text']
+            existing_review.reviewee_growth_rating = form.cleaned_data['reviewee_growth_rating']
+            existing_review.reviewee_execution_rating = form.cleaned_data['reviewee_execution_rating']
+            existing_review.reviewee_collaboration_rating = form.cleaned_data['reviewee_collaboration_rating']
+            existing_review.save()
+            messages.success(request, f"Review for {reviewee.user.username} has been updated.")
+
+    else:
+        form = ReviewForm()
+
+    return render(request, 'feedback/create-review.html', {'reviewees': reviewees, 'form': form})

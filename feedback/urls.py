@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import create_feedback_process, home, register, login_view, logout_view, profile_view, user_list, select_reviewer
+from .views import create_feedback_process, home, register, login_view, logout_view, profile_view, user_list, select_reviewer, create_review
 
 urlpatterns = [
     path('', home, name='home'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('user-list/', user_list, name='user-list'),
     path('create-feedback-process/',create_feedback_process, name='create-feedback-process'),
     path('select-reviewer/', select_reviewer, name='select-reviewer'),
+    path('create-review/', create_review, name='create-review'),
 ]

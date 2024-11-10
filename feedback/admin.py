@@ -25,9 +25,19 @@ class UserProfileAdmin(admin.ModelAdmin):
 admin.site.register(UserProfile, UserProfileAdmin)
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ( 'department','reviewee','feedback_process_id', 'reviewer', 'review_id', 'review_text')
-     
-     
+    list_display = (
+        'department', 
+        'reviewee', 
+        'feedback_process_id', 
+        'reviewer', 
+        'review_id', 
+        'reviewee_strengths_text', 
+        'reviewee_improvements_text',
+        'reviewee_growth_rating',
+        'reviewee_execution_rating',
+        'reviewee_collaboration_rating'
+    )
+    
     def department(self, obj):
         return dict(UserProfile.DEPARTMENT_CHOICES).get(obj.feedback_process.reviewee.department)
     department.short_description = 'Department'
@@ -36,11 +46,9 @@ class ReviewAdmin(admin.ModelAdmin):
         return obj.feedback_process.reviewee.user.username
     reviewee.short_description = 'Reviewee'
 
-    
     def feedback_process_id(self, obj):
         return obj.feedback_process.id
     feedback_process_id.short_description = 'Feedback Process ID'
-
 
     def review_id(self, obj):
         return obj.id
@@ -50,10 +58,26 @@ class ReviewAdmin(admin.ModelAdmin):
         return obj.reviewer.user.username if obj.reviewer else 'No reviewer'
     reviewer.short_description = 'Reviewer'
 
+    def reviewee_strengths_text(self, obj):
+        return obj.reviewee_strengths_text[:50]
+    reviewee_strengths_text.short_description = 'Strengths'
     
-    def review_text(self, obj):
-        return obj.review_text
-    review_text.short_description = 'Review Text'
+    def reviewee_improvements_text(self, obj):
+        return obj.reviewee_improvements_text[:50]
+    reviewee_improvements_text.short_description = 'Improvements'
+    
+    def reviewee_growth_rating(self, obj):
+        return obj.get_reviewee_growth_rating_display()
+    reviewee_growth_rating.short_description = 'Growth Rating'
+
+    def reviewee_execution_rating(self, obj):
+        return obj.get_reviewee_execution_rating_display()
+    reviewee_execution_rating.short_description = 'Execution Rating'
+
+    def reviewee_collaboration_rating(self, obj):
+        return obj.get_reviewee_collaboration_rating_display()
+    reviewee_collaboration_rating.short_description = 'Collaboration Rating'
+
 admin.site.register(Review, ReviewAdmin)
 
 

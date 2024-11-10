@@ -2,13 +2,16 @@
 
 {% block content %}
     <h2>Select a Reviewer</h2>
-
     {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
+    <div class="messages" role="alert" aria-live="assertive">
+      <ul>
+        {% for message in messages %}
+          <li class="message {{ message.tags }}">
+            <strong>{% if message.tags %}{{ message.tags|capfirst }}:{% endif %}</strong> {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   {% endif %}
 
     <form method="POST">

@@ -24,7 +24,33 @@ class FeedbackProcess(models.Model):
 class Review(models.Model):
     feedback_process = models.ForeignKey(FeedbackProcess, on_delete=models.CASCADE, related_name="review")
     reviewer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name="reviews_given")
-    review_text = models.TextField()
+    reviewee_strengths_text= models.TextField(blank=True, null=True)
+    reviewee_improvements_text = models.TextField(blank=True, null=True)
+    GROWTH_CHOICES = [
+    (1, 'Lacks initiative for growth, no improvement effort'),
+    (2, 'Occasionally seeks growth but lacks consistency'),
+    (3, 'Actively seeks learning and shows progress'),
+    (4, 'Regularly challenges themselves, takes initiative'),
+    (5, 'Proactively seeks growth, mentors others')
+    ]  
+    EXECUTION_CHOICES = [
+    (1, 'Avoids change, struggles to deliver'),
+    (2, 'Open to ideas but execution is inconsistent'),
+    (3, 'Contributes to innovation and delivers results'),
+    (4, 'Leads innovation, consistently drives impactful outcomes'),
+    (5, 'Champions bold change, consistently exceeds expectations')
+    ]
+    COLLABORATION_CHOICES = [
+    (1, 'Works alone, avoids teamwork'),
+    (2, 'Participates when needed, limited communication'),
+    (3, 'Actively collaborates and communicates effectively'),
+    (4, 'Highly collaborative, fosters positive team dynamics'),
+    (5, 'Leads collaboration, elevates team performance')
+    ]
+    reviewee_growth_rating = models.IntegerField(blank=True,null=True, choices=GROWTH_CHOICES)
+    reviewee_execution_rating = models.IntegerField(blank=True, null=True,choices=EXECUTION_CHOICES)
+    reviewee_collaboration_rating = models.IntegerField(blank=True, null=True,choices=COLLABORATION_CHOICES)
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['reviewer', 'feedback_process'], name='unique_reviewer_feedback_process')
