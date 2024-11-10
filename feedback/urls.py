@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import create_feedback_process, home, register, login_view, logout_view, profile_view, user_list
+from .views import create_feedback_process, home, register, login_view, logout_view, profile_view, user_list, select_reviewer
 
 urlpatterns = [
     path('', home, name='home'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('profile/', profile_view, name='profile'),
     path('user-list/', user_list, name='user-list'),
     path('create-feedback-process/',create_feedback_process, name='create-feedback-process'),
+    path('select-reviewer/', select_reviewer, name='select-reviewer'),
 ]

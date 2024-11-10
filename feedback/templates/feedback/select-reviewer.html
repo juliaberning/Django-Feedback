@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Select a Reviewer</h2>
+
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <label for="reviewer">Select a Reviewer:</label>
+        <select name="reviewer" id="reviewer">
+            {% for reviewer in potential_reviewers %}
+                <option value="{{ reviewer.id }}">{{ reviewer.user.username }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}

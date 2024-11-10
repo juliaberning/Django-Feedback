@@ -10,6 +10,7 @@
                 <th>Email</th>
                 <th>Department</th>
                 <th>Manager</th>
+                <th>Reviewers</th>
             </tr>
         </thead>
         <tbody>
@@ -21,20 +22,21 @@
                     <td>{{ user.user.email }}</td>
                     <td>{{ user.department }}</td>
                     <td>{{ user.manager }}</td>
+                    <td>
+                        {% if user.reviewers %}
+                            {{ user.reviewers|join:", " }}
+                        {% else %}
+                            No reviewers assigned
+                        {% endif %}
+                    </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="6">No users found.</td>
+                    <td colspan="7">No users found.</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 {% endblock %}
-
-
-
-
-
-
 
 

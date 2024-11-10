@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile, FeedbackProcess
+from django.db import IntegrityError
+from .models import Review, UserProfile, FeedbackProcess
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import CombinedProfileForm, CustomUserCreationForm
@@ -67,6 +68,16 @@ def profile_view(request):
 @login_required
 def user_list(request):
     users = UserProfile.objects.all()
+
+    for user in users:
+        feedback_process = FeedbackProcess.objects.filter(reviewee=user).first()
+        
+        if feedback_process:
+            reviewers = Review.objects.filter(feedback_process=feedback_process)
+            user.reviewers = [review.reviewer.user.username for review in reviewers]
+        else:
+            user.reviewers = []
+
     return render(request, 'feedback/user-list.html', {'users': users})
 
 
@@ -93,4 +104,48 @@ def create_feedback_process(request):
     
     return render(request, 'feedback/create-feedback-process.html', {
         'user_profile': user_profile
+    })
+
+@login_required
+def select_reviewer(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        messages.info(request, "You need to complete your profile.")
+        return redirect('profile')
+
+    feedback_process = FeedbackProcess.objects.filter(reviewee=user_profile).first()
+
+    if not feedback_process:
+        messages.error(request, "You do not have an existing feedback process.")
+        return redirect('create-feedback-process')
+
+    potential_reviewers = UserProfile.objects.all()
+
+    if request.method == 'POST':
+        reviewer_id = request.POST.get('reviewer')
+        if reviewer_id:
+            reviewer = UserProfile.objects.get(id=reviewer_id)
+            
+            
+            try:
+                Review.objects.create(
+                    feedback_process=feedback_process,
+                    reviewer=reviewer,  
+                    review_text=""  
+                )
+                messages.success(request, f"Reviewer {reviewer.user.username} has been selected.")
+                return redirect('user-list')
+
+            except IntegrityError:
+                messages.error(request, f"Reviewer {reviewer.user.username} has already been assigned for this feedback process.")
+                return redirect('select-reviewer')
+            
+        else:
+            messages.error(request, "Please select a reviewer.")
+    
+    return render(request, 'feedback/select-reviewer.html', {
+        'user_profile': user_profile,
+        'feedback_process': feedback_process,
+        'potential_reviewers': potential_reviewers,
     })
