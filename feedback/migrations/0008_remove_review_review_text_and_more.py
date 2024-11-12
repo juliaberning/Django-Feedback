@@ -4,39 +4,68 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('feedback', '0007_feedbackprocess_creation_date'),
+        ("feedback", "0007_feedbackprocess_creation_date"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='review',
-            name='review_text',
+            model_name="review",
+            name="review_text",
         ),
         migrations.AddField(
-            model_name='review',
-            name='reviewee_collaboration_rating',
-            field=models.IntegerField(blank=True, choices=[('1', 'Works alone, avoids teamwork'), ('2', 'Participates when needed, limited communication'), ('3', 'Actively collaborates and communicates effectively'), ('4', 'Highly collaborative, fosters positive team dynamics'), ('5', 'Leads collaboration, elevates team performance')], null=True),
+            model_name="review",
+            name="reviewee_collaboration_rating",
+            field=models.IntegerField(
+                blank=True,
+                choices=[
+                    ("1", "Works alone, avoids teamwork"),
+                    ("2", "Participates when needed, limited communication"),
+                    ("3", "Actively collaborates and communicates effectively"),
+                    ("4", "Highly collaborative, fosters positive team dynamics"),
+                    ("5", "Leads collaboration, elevates team performance"),
+                ],
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='review',
-            name='reviewee_execution_rating',
-            field=models.IntegerField(blank=True, choices=[('1', 'Avoids change, struggles to deliver'), ('2', 'Open to ideas but execution is inconsistent'), ('3', 'Contributes to innovation and delivers results'), ('4', 'Leads innovation, consistently drives impactful outcomes'), ('5', 'Champions bold change, consistently exceeds expectations')], null=True),
+            model_name="review",
+            name="reviewee_execution_rating",
+            field=models.IntegerField(
+                blank=True,
+                choices=[
+                    ("1", "Avoids change, struggles to deliver"),
+                    ("2", "Open to ideas but execution is inconsistent"),
+                    ("3", "Contributes to innovation and delivers results"),
+                    ("4", "Leads innovation, consistently drives impactful outcomes"),
+                    ("5", "Champions bold change, consistently exceeds expectations"),
+                ],
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='review',
-            name='reviewee_growth_rating',
-            field=models.IntegerField(blank=True, choices=[('1', 'Lacks initiative for growth, no improvement effort'), ('2', 'Occasionally seeks growth but lacks consistency'), ('3', 'Actively seeks learning and shows progress'), ('4', 'Regularly challenges themselves, takes initiative'), ('5', 'Proactively seeks growth, mentors others')], null=True),
+            model_name="review",
+            name="reviewee_growth_rating",
+            field=models.IntegerField(
+                blank=True,
+                choices=[
+                    ("1", "Lacks initiative for growth, no improvement effort"),
+                    ("2", "Occasionally seeks growth but lacks consistency"),
+                    ("3", "Actively seeks learning and shows progress"),
+                    ("4", "Regularly challenges themselves, takes initiative"),
+                    ("5", "Proactively seeks growth, mentors others"),
+                ],
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='review',
-            name='reviewee_improvements_text',
+            model_name="review",
+            name="reviewee_improvements_text",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='review',
-            name='reviewee_strengths_text',
+            model_name="review",
+            name="reviewee_strengths_text",
             field=models.TextField(blank=True),
         ),
     ]

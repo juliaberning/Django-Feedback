@@ -5,16 +5,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('feedback', '0006_remove_feedbackprocess_reviewer_review_reviewer_and_more'),
+        ("feedback", "0006_remove_feedbackprocess_reviewer_review_reviewer_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='feedbackprocess',
-            name='creation_date',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="feedbackprocess",
+            name="creation_date",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
     ]
