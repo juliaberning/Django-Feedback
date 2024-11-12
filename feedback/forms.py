@@ -51,3 +51,11 @@ class ReviewForm(forms.ModelForm):
             'reviewee_strengths_text': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
             'reviewee_improvements_text': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
         }
+
+        labels = {
+            'reviewee_strengths_text': 'Strengths',  
+            'reviewee_improvements_text': 'Improvements',  
+            'reviewee_growth_rating': 'Work hard to grow',  
+            'reviewee_execution_rating': 'Disrupt & Execute',  
+            'reviewee_collaboration_rating': 'Collaborate',  
+        }

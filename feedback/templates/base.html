@@ -4,21 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My App{% endblock %}</title>
+    <head>
+        <link rel= "stylesheet" type="text/css" href="https://bootswatch.com/5/yeti/bootstrap.min.css" >
+    </head>
+
+    {% load crispy_forms_tags %}
 </head>
 <body>
     <header>
-        <nav>
-            <ul>
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+            <div class="container-fluid">
+            <ul class="navbar-nav me-auto">
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'profile' %}">Profile</a></li>
-                    <li><a href="{% url 'user-list' %}">User List</a></li>
-                    <li><a href="{% url 'create-feedback-process' %}">Feedback process</a></li>
-                    <li><a href="{% url 'select-reviewer' %}">Reviewer selection</a></li>
-                    <li><a href="{% url 'create-review' %}">Create Review</a></li>
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user-list' %}">User List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create-feedback-process' %}">Feedback process</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'select-reviewer' %}">Reviewer selection</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create-review' %}">Create Review</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
                 {% endif %}
             </ul>
+            </div>
         </nav>
     </header>
 

@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
-
 {% block title %}Login{% endblock %}
 
 {% block content %}
+
+<div class="container mt-5">
     <h2>Login</h2>
-    <form method="POST">
+    {% include 'messages.html'%}
+    <form method="POST" class="col-md-4">
         {% csrf_token %}
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
-    <p><a href="{% url 'register' %}">Don't have an account? Register</a></p>
+        <div>
+            <label for="Username" class="form-label mt-4">Username</label>
+            <input type="text" class="form-control" name="username" placeholder="Username" required>
+          </div>
+        <div>
+            <label for="Password" class="form-label mt-4">Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Password" required>
+        </div>
+        <button type="submit" class="btn btn-primary  mt-4">Login</button>
+      </form>
+      <p class="mt-4"><a href="{% url 'register' %}">Don't have an account? Register</a></p>
+</div>
 {% endblock %}

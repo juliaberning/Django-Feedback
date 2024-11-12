@@ -39,12 +39,12 @@ def login_view(request):
             login(request, user)
             return redirect('home')  
         else:
-            messages.error(request, 'Invalid username or password.')
+            messages.warning(request, 'Invalid username or password.')
     return render(request, 'feedback/login.html')
 
 def logout_view(request):
     logout(request)
-    return redirect('login') 
+    return redirect('home') 
 
 
 @login_required
@@ -59,7 +59,6 @@ def profile_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('home')
     else:
         form = CombinedProfileForm(instance=user_profile, user=request.user)
 
@@ -94,7 +93,7 @@ def create_feedback_process(request):
     
     if request.method == 'POST':
         if existing_feedback_process:
-            messages.info(request, "You already have an existing feedback process.")
+            messages.warning(request, "You already have an existing feedback process.")
         else:
             FeedbackProcess.objects.create(
                 reviewee=user_profile,
@@ -137,7 +136,7 @@ def select_reviewer(request):
                 return redirect('user-list')
 
             except IntegrityError:
-                messages.error(request, f"Reviewer {reviewer.user.username} has already been assigned for this feedback process.")
+                messages.warning(request, f"Reviewer {reviewer.user.username} has already been assigned for this feedback process.")
                 return redirect('select-reviewer')
             
         else:

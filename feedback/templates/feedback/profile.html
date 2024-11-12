@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}Edit Profile{% endblock %}
 
 {% block content %}
-  <h1>Edit Your Profile</h1>
+  <div class="container mt-5">
+    <h2 class="mt-4">{% block page_title %}Edit Your Profile{% endblock %}</h2>
+    
+  {% include 'messages.html'%}
 
-  {% if messages %}
-  <div class="messages" role="alert" aria-live="assertive">
-    <ul>
-      {% for message in messages %}
-        <li class="message {{ message.tags }}">
-          <strong>{% if message.tags %}{{ message.tags|capfirst }}:{% endif %}</strong> {{ message }}
-        </li>
-      {% endfor %}
-    </ul>
+    <form method="POST">
+      {% csrf_token %}
+
+      <fieldset class="mt-4">
+        <legend class="w-auto">Profile Information</legend>
+
+        <div class="row justify-content-start">
+          <div class="col-md-6">
+            {{ form|crispy }}
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Save Profile</button>
+      </fieldset>
+    </form>
   </div>
-{% endif %}
-
-
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }} 
-    <button type="submit">Save Profile</button>
-  </form>
 {% endblock %}

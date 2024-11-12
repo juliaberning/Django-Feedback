@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
-
-{% block title %}
-    Home
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1>Welcome to the Employee Evaluation App</h1>
-    {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}!</p>
-        <p><a href="{% url 'logout' %}">Logout</a></p>
-    {% else %}
-        <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></p>
-    {% endif %}
+<div class="container mt-5">
+  <h2>Home</h2>
+  {% if user.is_authenticated %}
+  <p class="mt-4">Hello, {{ user.username }}!</p>
+  <a href="{% url 'logout' %}" class="btn btn-danger mt-4">Logout</a>
+  {% else %}
+  <p>
+    <a href="{% url 'login' %}" class="btn btn-primary mt-4">Login</a>
+    <a href="{% url 'register' %}" class="btn btn-success mt-4 ms-3">Register</a>
+  </p>
+  {% endif %}
+</div>
 {% endblock %}
