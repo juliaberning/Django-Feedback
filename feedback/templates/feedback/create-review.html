@@ -9,23 +9,23 @@
     
     {% include 'messages.html'%}
 
-    <form method="POST">
+    <form method="post">
       {% csrf_token %}
       <fieldset>
-      <div class="row justify-content-start">
-        <div class="col-md-6">
-            <legend class="w-auto mt-4">Select Reviewee</legend>
-          <select name="reviewee" id="reviewee" class="form-select">
-          {% for reviewee in reviewees %}
-            <option value="{{ reviewee.id }}">{{ reviewee.user.username }}</option>
-          {% empty %}
-            <option value="" disabled>No reviewees available</option>
-          {% endfor %}
-          </select>
-          <legend class="w-auto mt-4">Review</legend>
-            {{ form|crispy }}
+        <div class="row justify-content-start">
+          <div class="col-md-6">
+              <legend class="w-auto mt-4">Select Reviewee</legend>
+              <select name="reviewee" id="reviewee" class="form-select">
+                {% for reviewee in reviewees %}
+                <option value="{{ reviewee.id }}">{{ reviewee.user.username }}</option>
+                {% empty %}
+                <option value="" disabled>No reviewees available</option>
+                {% endfor %}
+              </select>
+              <legend class="w-auto mt-4">Review</legend>
+              {{ form|crispy }}
+          </div>
         </div>
-      </div>
 
         <button type="submit" class="btn btn-primary mt-3">Submit review</button>
       </fieldset>

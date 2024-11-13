@@ -5,11 +5,11 @@
 <div class="container mt-5">
   <h2>Start your feedback process for this quarter</h2>
 
-{% include 'messages.html'%}
+  {% include 'messages.html'%}
 
-    <form method="POST" class="mt-4">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Create Feedback Process for Q4</button>
-    </form>
+  <form method="post" class="mt-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Create Feedback Process for Q4</button>
+  </form>
 </div>
 {% endblock %}
