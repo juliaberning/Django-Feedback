@@ -9,6 +9,7 @@ from .views import (
     user_list,
     select_reviewer,
     create_review,
+    view_reviews
 )
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     ),
     path("select-reviewer/", select_reviewer, name="select-reviewer"),
     path("create-review/", create_review, name="create-review"),
+    path("view-reviews/", view_reviews, name="view-reviews"),
 ]

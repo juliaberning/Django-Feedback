@@ -217,3 +217,24 @@ def create_review(request):
     return render(
         request, "feedback/create-review.html", {"reviewees": reviewees, "form": form}
     )
+
+@login_required
+def view_reviews(request):
+    try:
+        user = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        messages.info(request, "You need to complete your profile.")
+        return redirect("profile")
+    
+    created_feedback = Review.objects.filter(reviewer=user)
+    obtained_feedback_processes = FeedbackProcess.objects.filter(reviewee=user)
+    obtained_feedback = [review for feedback_process in obtained_feedback_processes for review in feedback_process.review.all() if review.reviewer != user]
+    
+    return render(
+        request,
+        "feedback/view-reviews.html",
+        {
+            "created_feedback": created_feedback,
+            "obtained_feedback": obtained_feedback,
+        }
+    )
