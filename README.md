@@ -23,10 +23,7 @@ source .venv/bin/activate
 ```
 ### 2. Install dependencies
 ```bash
-pip install django django-extensions
-pip install django-crispy-forms
-pip install crispy-bootstrap5
-python3 -m pip install -U djlint
+pip install -r requirements.txt
 
 ```
 
